@@ -1,2 +1,4 @@
-# cssanimations
-Concise css animations for your DIVs
+# Css animations with javascript
+
+Concise css animations for your DIVs,
+dinamically injected from javascript.
