@@ -66,3 +66,28 @@ var styleComposer = function(anType, params) {
     styleTokens['base'](anType)
   );
 }
+
+
+exports.show = function(message, anType) {
+  var co = message.trim();
+  var re=new RegExp("\<(\\w+)(\\s|\>)"); // extract html element type
+  var tg = re.exec(co);
+  if (!tg || tg.length < 2) return;
+  
+  // create element
+  var d = document.createElement(tg[1]);
+  document.body.appendChild(d);
+  
+  // create animated style
+  var s = document.createElement('style');
+  var st = '';
+  var params = {};
+  if (anType == 'hoverable') params.left = newd.style.left;
+  if ((st = styleComposer(anType, params)) == 'na') console.log('unknown');
+    else s.innerHTML = st;
+  document.body.appendChild(s);
+  
+  d.className += (" "+anType); // apply animation style
+  if (anType == 'hoverable') d.style.left = ''; // we need this hack to make :hover work
+  
+}
