@@ -1,4 +1,4 @@
 # Css animations with javascript
 
-Concise css animations for your DIVs,
+Concise css animations for your HTML elements,
 dinamically injected from javascript.
