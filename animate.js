@@ -1,3 +1,22 @@
+var replaceElement = function(ele, outerHTML) { // util function
+  var parent = false, refEle;
+  //if element that's going to be changed has previousElementSibling, take it as reference. If not, the parentElement will be the reference.
+  if (ele.previousElementSibling !== null)
+    refEle = ele.previousElementSibling;
+  else
+  {
+    refEle = ele.parentElement;
+    //indicate that parentElement has been taken as reference
+    parent = true;
+  }
+  //change the outerHTML
+  ele.outerHTML = outerHTML;
+  //return the correct reference
+  if (parent)
+    return refEle.firstElementChild;
+  else return refEle.nextElementSibling;
+}
+
 var tS = function(token, value) { // tokenShimmer
   return ('-webkit-'+token+': ' + value + "; "+ token + ': '+value+';');
 }
@@ -67,22 +86,25 @@ var styleComposer = function(anType, params) {
   );
 }
 
+var animate = {};
 
-exports.show = function(message, anType) {
+animate.show = function(message, anType) {
   var co = message.trim();
   var re=new RegExp("\<(\\w+)(\\s|\>)"); // extract html element type
   var tg = re.exec(co);
   if (!tg || tg.length < 2) return;
   
   // create element
-  var d = document.createElement(tg[1]);
-  document.body.appendChild(d);
+  var emptyd = document.createElement(tg[1]);
+  document.body.appendChild(emptyd);
+  var d = replaceElement(emptyd, co);
+  
   
   // create animated style
   var s = document.createElement('style');
   var st = '';
   var params = {};
-  if (anType == 'hoverable') params.left = newd.style.left;
+  if (anType == 'hoverable') params.left = d.style.left;
   if ((st = styleComposer(anType, params)) == 'na') console.log('unknown');
     else s.innerHTML = st;
   document.body.appendChild(s);
